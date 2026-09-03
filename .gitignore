@@ -7,3 +7,5 @@ report.html
 __pycache__/
 *.py[cod]
 *$py.class
+
+playwright-log.txt
