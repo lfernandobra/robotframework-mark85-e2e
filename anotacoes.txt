@@ -1,0 +1,3 @@
+Pagina recomendada para encontrar elementos na pagina html:
+
+https://devhints.io/xpath
