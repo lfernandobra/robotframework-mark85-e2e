@@ -8,8 +8,10 @@ Resource         ../resources/base.robot
 Deve poder cadastrar um novo usuário
     [Documentation]    Verifica se um novo usuário pode ser cadastrado com sucesso.
     ${name}    Set Variable    Luis Fernando Brandão
-    ${email}    Set Variable    lfernandobra@yahoo.com
+    ${email}    Set Variable    lfernandobra@gmail.com
     ${password}    Set Variable    pwd123
+
+    Remove user from database    ${email}
 
     Start Session
     Go To    http:localhost:3000/signup
