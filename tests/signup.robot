@@ -1,8 +1,8 @@
 *** Settings ***
 Documentation    Cenários de testes do cadastro de usuários
 
-Library          Browser
 Library          FakerLibrary
+Resource         ../resources/base.robot
 
 
 *** Test Cases ***
@@ -12,8 +12,8 @@ Deve poder cadastrar um novo usuário
     ${email}    FakerLibrary.Free Email
     ${password}    Set Variable    pwd123
 
-    New Browser    chromium    headless=True
-    New Page    http://localhost:3000/signup
+    Start Session
+    Go To    http:localhost:3000/signup
 
     Wait For Elements State    xpath=//h1    visible    5
     Get Text    xpath=//h1    equal    Faça seu cadastro
