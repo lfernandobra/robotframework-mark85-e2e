@@ -33,7 +33,8 @@ Deve poder cadastrar um novo usuário
     Get Text    .notice p    equal    Boas vindas ao Mark85, o seu gerenciador de tarefas.
 
 Não deve permitir o cadastro com email duplicado
-    [Documentation]
+    [Documentation]    Verifica se não é possível cadastrar um usuário com e-mail duplicado.
+    [Tags]    dup
     Start Session
 
     Go To    http:localhost:3000/signup
