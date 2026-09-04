@@ -4,18 +4,12 @@ Documentation    Cenários de testes do cadastro de usuários
 Resource         ../resources/base.robot
 
 
-*** Variables ***
-${NAME}        Luis Fernando Brandão
-${EMAIL}       lfernandobra@gmail.com
-${PASSWORD}    pwd123
-
-
 *** Test Cases ***
 Deve poder cadastrar um novo usuário
     [Documentation]    Verifica se um novo usuário pode ser cadastrado com sucesso.
-    # ${name}    Set Variable    Luis Fernando Brandão
-    # ${email}    Set Variable    lfernandobra@gmail.com
-    # ${password}    Set Variable    pwd123
+    ${NAME}    Set Variable    Luis Fernando Brandão
+    ${EMAIL}    Set Variable    lfernandobra@gmail.com
+    ${PASSWORD}    Set Variable    pwd123
 
     Remove user from database    ${EMAIL}
 
@@ -35,6 +29,14 @@ Deve poder cadastrar um novo usuário
 Não deve permitir o cadastro com email duplicado
     [Documentation]    Verifica se não é possível cadastrar um usuário com e-mail duplicado.
     [Tags]    dup
+
+    ${NAME}    Set Variable    Fernando Luis Brandão
+    ${EMAIL}    Set Variable    fernandolbra@gmail.com
+    ${PASSWORD}    Set Variable    pwd123
+
+    Remove user from database    ${EMAIL}
+    Insert user from database    ${NAME}    ${EMAIL}    ${PASSWORD}
+
     Start Session
 
     Go To    http:localhost:3000/signup
