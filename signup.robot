@@ -21,3 +21,6 @@ Deve poder cadastrar um novo usuário
     Fill Text    id=email    ${email}
     Fill Text    id=password    ${password}
     Click    id=buttonSignup
+
+    Wait For Elements State    css=.notice p    visible    5
+    Get Text    .notice p    equal    Boas vindas ao Mark85, o seu gerenciador de tarefas.
