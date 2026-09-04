@@ -1,15 +1,14 @@
 *** Settings ***
 Documentation    Cenários de testes do cadastro de usuários
 
-Library          FakerLibrary
 Resource         ../resources/base.robot
 
 
 *** Test Cases ***
 Deve poder cadastrar um novo usuário
     [Documentation]    Verifica se um novo usuário pode ser cadastrado com sucesso.
-    ${name}    FakerLibrary.Name
-    ${email}    FakerLibrary.Free Email
+    ${name}    Set Variable    Luis Fernando Brandão
+    ${email}    Set Variable    lfernandobra@yahoo.com
     ${password}    Set Variable    pwd123
 
     Start Session
