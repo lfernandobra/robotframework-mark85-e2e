@@ -3,6 +3,11 @@ Documentation    Cenários de testes do cadastro de usuários
 
 Resource         ../resources/base.robot
 
+# Suite Setup    Log    Tudo aqui ocorre antes da Suite (antes de todos os testes)
+# Suite Teardown    Log    Tudo aqui ocorre depois da Suite (depois de todos os testes)
+Test Setup       Start Session
+Test Teardown    Take Screenshot
+
 
 *** Test Cases ***
 Deve poder cadastrar um novo usuário
@@ -14,7 +19,6 @@ Deve poder cadastrar um novo usuário
 
     Remove User From Database    ${USER}[email]
 
-    Start Session
     Go To    http:localhost:3000/signup
 
     Wait For Elements State    xpath=//h1    visible    5
@@ -26,7 +30,6 @@ Deve poder cadastrar um novo usuário
 
     Wait For Elements State    css=.notice p    visible    5
     Get Text    .notice p    equal    Boas vindas ao Mark85, o seu gerenciador de tarefas.
-    Take Screenshot
 
 Não deve permitir o cadastro com email duplicado
     [Documentation]    Verifica se não é possível cadastrar um usuário com e-mail duplicado.
@@ -40,8 +43,6 @@ Não deve permitir o cadastro com email duplicado
     Remove User From Database    ${USER}[email]
     Insert User From Database    ${USER}
 
-    Start Session
-
     Go To    http:localhost:3000/signup
 
     Wait For Elements State    css=h1    visible    5
@@ -54,5 +55,3 @@ Não deve permitir o cadastro com email duplicado
 
     Wait For Elements State    css=.notice p    visible    5
     Get Text    .notice p    equal    Oops! Já existe uma conta com o e-mail informado.
-
-    Take Screenshot
