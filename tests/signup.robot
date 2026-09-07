@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation    Cenários de testes do cadastro de usuários
 
-Resource         ../resources/base.robot
+Resource         ../resources/base.resource
 
 # Suite Setup    Log    Tudo aqui ocorre antes da Suite (antes de todos os testes)
 # Suite Teardown    Log    Tudo aqui ocorre depois da Suite (depois de todos os testes)
