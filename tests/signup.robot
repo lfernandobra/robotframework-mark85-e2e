@@ -19,17 +19,9 @@ Deve poder cadastrar um novo usuário
 
     Remove User From Database    ${USER}[email]
 
-    Go To    ${BASE_URL}/signup
-
-    Wait For Elements State    xpath=//h1    visible    5
-    Get Text    xpath=//h1    equal    Faça seu cadastro
-    Fill Text    css=input[name=name]    ${USER}[name]
-    Fill Text    css=input[name=email]    ${USER}[email]
-    Fill Text    css=input[name=password]    ${USER}[password]
-    Click    css=button[type=submit] >> text=Cadastrar
-
-    Wait For Elements State    css=.notice p    visible    5
-    Get Text    .notice p    equal    Boas vindas ao Mark85, o seu gerenciador de tarefas.
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+    Notice Should Be    Boas vindas ao Mark85, o seu gerenciador de tarefas.
 
 Não deve permitir o cadastro com email duplicado
     [Documentation]    Verifica se não é possível cadastrar um usuário com e-mail duplicado.
@@ -43,15 +35,6 @@ Não deve permitir o cadastro com email duplicado
     Remove User From Database    ${USER}[email]
     Insert User From Database    ${USER}
 
-    Go To    ${BASE_URL}/signup
-
-    Wait For Elements State    css=h1    visible    5
-    Get Text    css=h1    equal    Faça seu cadastro
-
-    Fill Text    css=input[name=name]    ${USER}[name]
-    Fill Text    css=input[name=email]    ${USER}[email]
-    Fill Text    css=input[name=password]    ${USER}[password]
-    Click    css=button[type=submit] >> text=Cadastrar
-
-    Wait For Elements State    css=.notice p    visible    5
-    Get Text    .notice p    equal    Oops! Já existe uma conta com o e-mail informado.
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+    Notice Should Be    Oops! Já existe uma conta com o e-mail informado.
