@@ -8,20 +8,20 @@ Resource         ../resources/base.robot
 Deve poder cadastrar um novo usuário
     [Documentation]    Verifica se um novo usuário pode ser cadastrado com sucesso.
     ${USER}    Create Dictionary
-    ...    NAME=Luis Fernando Brandão
-    ...    EMAIL=lfernandobra@gmail.com
-    ...    PASSWORD=pwd123
+    ...    name=Luis Fernando Brandão
+    ...    email=lfernandobra@gmail.com
+    ...    password=pwd123
 
-    Remove User From Database    ${USER}[EMAIL]
+    Remove User From Database    ${USER}[email]
 
     Start Session
     Go To    http:localhost:3000/signup
 
     Wait For Elements State    xpath=//h1    visible    5
     Get Text    xpath=//h1    equal    Faça seu cadastro
-    Fill Text    id=name    ${USER}[NAME]
-    Fill Text    id=email    ${USER}[EMAIL]
-    Fill Text    id=password    ${USER}[PASSWORD]
+    Fill Text    id=name    ${USER}[name]
+    Fill Text    id=email    ${USER}[email]
+    Fill Text    id=password    ${USER}[password]
     Click    id=buttonSignup
 
     Wait For Elements State    css=.notice p    visible    5
@@ -32,11 +32,11 @@ Não deve permitir o cadastro com email duplicado
     [Tags]    dup
 
     ${USER}    Create Dictionary
-    ...    NAME=Luis Fernando Brandão
-    ...    EMAIL=lfernandobra@gmail.com
-    ...    PASSWORD=pwd123
+    ...    name=Luis Fernando Brandão
+    ...    email=lfernandobra@gmail.com
+    ...    password=pwd123
 
-    Remove User From Database    ${USER}[EMAIL]
+    Remove User From Database    ${USER}[email]
     Insert User From Database    ${USER}
 
     Start Session
@@ -46,9 +46,9 @@ Não deve permitir o cadastro com email duplicado
     Wait For Elements State    css=h1    visible    5
     Get Text    css=h1    equal    Faça seu cadastro
 
-    Fill Text    id=name    ${USER}[NAME]
-    Fill Text    id=email    ${USER}[EMAIL]
-    Fill Text    id=password    ${USER}[PASSWORD]
+    Fill Text    id=name    ${USER}[name]
+    Fill Text    id=email    ${USER}[email]
+    Fill Text    id=password    ${USER}[password]
     Click    id=buttonSignup
 
     Wait For Elements State    css=.notice p    visible    5
