@@ -2,6 +2,7 @@
 log.html
 output.xml
 report.html
+results
 
 # Byte-compiled / Python cache
 __pycache__/
