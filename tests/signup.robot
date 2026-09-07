@@ -54,6 +54,81 @@ Campos obrigatórios
     Alert Should Be    Informe seu e-email
     Alert Should Be    Informe uma senha com pelo menos 6 digitos
 
+Não deve cadastrar com senha de 1 digito
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    short_pass
+    ${USER}    Create Dictionary
+    ...    name=${EMPTY}
+    ...    email=${EMPTY}
+    ...    password=1
+
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+
+    Alert Should Be    Informe seu nome completo
+    Alert Should Be    Informe seu e-email
+    Alert Should Be    Informe uma senha com pelo menos 6 digitos
+
+Não deve cadastrar com senha de 2 digitos
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    short_pass
+    ${USER}    Create Dictionary
+    ...    name=${EMPTY}
+    ...    email=${EMPTY}
+    ...    password=2
+
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+
+    Alert Should Be    Informe seu nome completo
+    Alert Should Be    Informe seu e-email
+    Alert Should Be    Informe uma senha com pelo menos 6 digitos
+
+Não deve cadastrar com senha de 3 digitos
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    short_pass
+    ${USER}    Create Dictionary
+    ...    name=${EMPTY}
+    ...    email=${EMPTY}
+    ...    password=3
+
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+
+    Alert Should Be    Informe seu nome completo
+    Alert Should Be    Informe seu e-email
+    Alert Should Be    Informe uma senha com pelo menos 6 digitos
+
+Não deve cadastrar com senha de 4 digitos
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    short_pass
+    ${USER}    Create Dictionary
+    ...    name=${EMPTY}
+    ...    email=${EMPTY}
+    ...    password=4
+
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+
+    Alert Should Be    Informe seu nome completo
+    Alert Should Be    Informe seu e-email
+    Alert Should Be    Informe uma senha com pelo menos 6 digitos
+
+Não deve cadastrar com senha de 5 digitos
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    short_pass
+    ${USER}    Create Dictionary
+    ...    name=${EMPTY}
+    ...    email=${EMPTY}
+    ...    password=5
+
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+
+    Alert Should Be    Informe seu nome completo
+    Alert Should Be    Informe seu e-email
+    Alert Should Be    Informe uma senha com pelo menos 6 digitos
+
 Não deve cadastrar com email incorreto
     [Documentation]    Verifica se o cadastro não permite o envio de email incorreto.
     [Tags]    inv_email
