@@ -38,3 +38,18 @@ Não deve permitir o cadastro com email duplicado
     Go To Signup Page
     Submit Signup Form    ${USER}
     Notice Should Be    Oops! Já existe uma conta com o e-mail informado.
+
+Campos obrigatórios
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    required
+    ${USER}    Create Dictionary
+    ...    name=${EMPTY}
+    ...    email=${EMPTY}
+    ...    password=${EMPTY}
+
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+
+    Alert Should Be    Informe seu nome completo
+    Alert Should Be    Informe seu e-email
+    Alert Should Be    Informe uma senha com pelo menos 6 digitos
