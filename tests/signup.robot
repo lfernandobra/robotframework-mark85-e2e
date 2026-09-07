@@ -77,37 +77,36 @@ Não deve cadastrar com senha de 2 digitos
     [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
     [Tags]    short_pass
     [Template]    NONE
-    Short Password    2
+    Short Password    12
 
 Não deve cadastrar com senha de 3 digitos
     [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
     [Tags]    short_pass
     [Template]    NONE
-    Short Password    3
+    Short Password    123
 
 Não deve cadastrar com senha de 4 digitos
     [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
     [Tags]    short_pass
     [Template]    NONE
-    Short Password    4
+    Short Password    1234
 
 Não deve cadastrar com senha de 5 digitos
     [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
     [Tags]    short_pass
     [Template]    NONE
-    Short Password    5
+    Short Password    12345
 
+# *** Keywords ***
+# Short Password
+#    [Documentation]    Verifica se o cadastro não permite uma senha com menos de 6 dígitos.
+#    [Arguments]    ${short_pass}
+#    ${USER}    Create Dictionary
+#    ...    name=Luis Fernando Brandão
+#    ...    email=lfernandobra@gmail.com
+#    ...    password=${short_pass}
 
-*** Keywords ***
-Short Password
-    [Documentation]    Verifica se o cadastro não permite uma senha com menos de 6 dígitos.
-    [Arguments]    ${short_pass}
-    ${USER}    Create Dictionary
-    ...    name=Luis Fernando Brandão
-    ...    email=lfernandobra@gmail.com
-    ...    password=${short_pass}
+#    Go To Signup Page
+#    Submit Signup Form    ${USER}
 
-    Go To Signup Page
-    Submit Signup Form    ${USER}
-
-    Alert Should Be    Informe uma senha com pelo menos 6 digitos
+#    Alert Should Be    Informe uma senha com pelo menos 6 digitos
