@@ -1,10 +1,7 @@
 *** Settings ***
-Library    libs/database.py
-Library    Browser
-
-
-*** Variables ***
-${BASE_URL}    http://localhost:3000
+Library     libs/database.py
+Library     Browser
+Resource    env.robot
 
 
 *** Keywords ***
