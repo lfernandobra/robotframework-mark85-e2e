@@ -19,7 +19,7 @@ Deve poder cadastrar um novo usuário
 
     Remove User From Database    ${USER}[email]
 
-    Go To    http:localhost:3000/signup
+    Go To    ${BASE_URL}/signup
 
     Wait For Elements State    xpath=//h1    visible    5
     Get Text    xpath=//h1    equal    Faça seu cadastro
@@ -43,7 +43,7 @@ Não deve permitir o cadastro com email duplicado
     Remove User From Database    ${USER}[email]
     Insert User From Database    ${USER}
 
-    Go To    http:localhost:3000/signup
+    Go To    ${BASE_URL}/signup
 
     Wait For Elements State    css=h1    visible    5
     Get Text    css=h1    equal    Faça seu cadastro
