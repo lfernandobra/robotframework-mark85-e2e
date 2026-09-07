@@ -26,6 +26,7 @@ Deve poder cadastrar um novo usuário
 
     Wait For Elements State    css=.notice p    visible    5
     Get Text    .notice p    equal    Boas vindas ao Mark85, o seu gerenciador de tarefas.
+    Take Screenshot
 
 Não deve permitir o cadastro com email duplicado
     [Documentation]    Verifica se não é possível cadastrar um usuário com e-mail duplicado.
@@ -53,3 +54,5 @@ Não deve permitir o cadastro com email duplicado
 
     Wait For Elements State    css=.notice p    visible    5
     Get Text    .notice p    equal    Oops! Já existe uma conta com o e-mail informado.
+
+    Take Screenshot
