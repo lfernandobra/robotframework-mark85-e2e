@@ -53,3 +53,16 @@ Campos obrigatórios
     Alert Should Be    Informe seu nome completo
     Alert Should Be    Informe seu e-email
     Alert Should Be    Informe uma senha com pelo menos 6 digitos
+
+Não deve cadastrar com email incorreto
+    [Documentation]    Verifica se o cadastro não permite o envio de email incorreto.
+    [Tags]    inv_email
+    ${USER}    Create Dictionary
+    ...    name=Charles Xavier
+    ...    email=xavier.com.br
+    ...    password=pwd123
+
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+
+    Alert Should Be    Digite um e-mail válido
