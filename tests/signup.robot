@@ -67,6 +67,23 @@ Não deve cadastrar com email incorreto
 
     Alert Should Be    Digite um e-mail válido
 
+Não deve cadastrar com senha muito curta
+    [Documentation]    Verifica se o cadastro não permite o envio de senhas com menos de 6 dígitos.
+    [Tags]    temp
+    @{password_list}    Create List    1    12    123    1234    12345
+
+    FOR    ${password}    IN    @{password_list}
+        ${USER}    Create Dictionary
+        ...    name=Luis Fernando Brandão
+        ...    email=lfernandobra@gmail.com
+        ...    password=${password}
+
+        Go To Signup Page
+        Submit Signup Form    ${USER}
+
+        Alert Should Be    Informe uma senha com pelo menos 6 digitos
+    END
+
 Não deve cadastrar com senha de 1 digito
     [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
     [Tags]    short_pass
@@ -101,12 +118,3 @@ Não deve cadastrar com senha de 5 digitos
 # Short Password
 #    [Documentation]    Verifica se o cadastro não permite uma senha com menos de 6 dígitos.
 #    [Arguments]    ${short_pass}
-#    ${USER}    Create Dictionary
-#    ...    name=Luis Fernando Brandão
-#    ...    email=lfernandobra@gmail.com
-#    ...    password=${short_pass}
-
-#    Go To Signup Page
-#    Submit Signup Form    ${USER}
-
-#    Alert Should Be    Informe uma senha com pelo menos 6 digitos
