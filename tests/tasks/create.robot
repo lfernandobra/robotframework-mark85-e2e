@@ -19,3 +19,4 @@ Deve poder cadastrar uma nova tarefa
 
     Go To Task Form
     Submit Task Form    ${DATA}[task]
+    Task Should Be Registered    ${DATA}[task][name]
