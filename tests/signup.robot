@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation    Cenários de testes do cadastro de usuários
 
-Resource         ../resources/base.robot
+Resource         ../resources/base.resource
 
 # Suite Setup    Log    Tudo aqui ocorre antes da Suite (antes de todos os testes)
 # Suite Teardown    Log    Tudo aqui ocorre depois da Suite (depois de todos os testes)
@@ -19,17 +19,9 @@ Deve poder cadastrar um novo usuário
 
     Remove User From Database    ${USER}[email]
 
-    Go To    http:localhost:3000/signup
-
-    Wait For Elements State    xpath=//h1    visible    5
-    Get Text    xpath=//h1    equal    Faça seu cadastro
-    Fill Text    id=name    ${USER}[name]
-    Fill Text    id=email    ${USER}[email]
-    Fill Text    id=password    ${USER}[password]
-    Click    id=buttonSignup
-
-    Wait For Elements State    css=.notice p    visible    5
-    Get Text    .notice p    equal    Boas vindas ao Mark85, o seu gerenciador de tarefas.
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+    Notice Should Be    Boas vindas ao Mark85, o seu gerenciador de tarefas.
 
 Não deve permitir o cadastro com email duplicado
     [Documentation]    Verifica se não é possível cadastrar um usuário com e-mail duplicado.
@@ -43,15 +35,86 @@ Não deve permitir o cadastro com email duplicado
     Remove User From Database    ${USER}[email]
     Insert User From Database    ${USER}
 
-    Go To    http:localhost:3000/signup
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+    Notice Should Be    Oops! Já existe uma conta com o e-mail informado.
 
-    Wait For Elements State    css=h1    visible    5
-    Get Text    css=h1    equal    Faça seu cadastro
+Campos obrigatórios
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    required
+    ${USER}    Create Dictionary
+    ...    name=${EMPTY}
+    ...    email=${EMPTY}
+    ...    password=${EMPTY}
 
-    Fill Text    id=name    ${USER}[name]
-    Fill Text    id=email    ${USER}[email]
-    Fill Text    id=password    ${USER}[password]
-    Click    id=buttonSignup
+    Go To Signup Page
+    Submit Signup Form    ${USER}
 
-    Wait For Elements State    css=.notice p    visible    5
-    Get Text    .notice p    equal    Oops! Já existe uma conta com o e-mail informado.
+    Alert Should Be    Informe seu nome completo
+    Alert Should Be    Informe seu e-email
+    Alert Should Be    Informe uma senha com pelo menos 6 digitos
+
+Não deve cadastrar com email incorreto
+    [Documentation]    Verifica se o cadastro não permite o envio de email incorreto.
+    [Tags]    inv_email
+    ${USER}    Create Dictionary
+    ...    name=Charles Xavier
+    ...    email=xavier.com.br
+    ...    password=pwd123
+
+    Go To Signup Page
+    Submit Signup Form    ${USER}
+
+    Alert Should Be    Digite um e-mail válido
+
+Não deve cadastrar com senha muito curta
+    [Documentation]    Verifica se o cadastro não permite o envio de senhas com menos de 6 dígitos.
+    [Tags]    temp
+    @{password_list}    Create List    1    12    123    1234    12345
+
+    FOR    ${password}    IN    @{password_list}
+        ${USER}    Create Dictionary
+        ...    name=Luis Fernando Brandão
+        ...    email=lfernandobra@gmail.com
+        ...    password=${password}
+
+        Go To Signup Page
+        Submit Signup Form    ${USER}
+
+        Alert Should Be    Informe uma senha com pelo menos 6 digitos
+    END
+
+Não deve cadastrar com senha de 1 digito
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    short_pass
+    [Template]    NONE
+    Short Password    1
+
+Não deve cadastrar com senha de 2 digitos
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    short_pass
+    [Template]    NONE
+    Short Password    12
+
+Não deve cadastrar com senha de 3 digitos
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    short_pass
+    [Template]    NONE
+    Short Password    123
+
+Não deve cadastrar com senha de 4 digitos
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    short_pass
+    [Template]    NONE
+    Short Password    1234
+
+Não deve cadastrar com senha de 5 digitos
+    [Documentation]    Verifica se o cadastro não permite o envio de campos obrigatórios vazios.
+    [Tags]    short_pass
+    [Template]    NONE
+    Short Password    12345
+
+# *** Keywords ***
+# Short Password
+#    [Documentation]    Verifica se o cadastro não permite uma senha com menos de 6 dígitos.
+#    [Arguments]    ${short_pass}
