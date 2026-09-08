@@ -16,3 +16,4 @@ Deve poder logar com um usuário pré-cadastrado
     ...    password=pwd123
 
     Submit Login Form    ${USER}
+    User Should Be Logged In    ${USER}[name]

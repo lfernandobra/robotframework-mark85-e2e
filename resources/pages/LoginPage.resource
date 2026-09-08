@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation    Ações e elementos da página de login
 
+Library          String
 Library          Browser
 
 
@@ -13,3 +14,12 @@ Submit Login Form
 
     # Click    xpath=//button[text()="Entrar"]
     Click    css=button >> text=Entrar
+
+User Should Be Logged In
+    [Documentation]    Verifica se o usuário está autenticado e vê o nome no cabeçalho.
+    [Arguments]    ${name}
+    @{splited_name}    Split String    ${name}
+    ${element}    Set Variable    css=header .right small
+    Wait For Elements State    ${element}
+    ...    visible    5
+    Get Text    ${element}    equal    Olá, ${splited_name}[0]
