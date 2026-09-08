@@ -15,5 +15,8 @@ Deve poder logar com um usuário pré-cadastrado
     ...    email=lfernandobra@yahoo.com
     ...    password=pwd123
 
+    Remove User From Database    ${USER}[email]
+    Insert User From Database    ${USER}
+
     Submit Login Form    ${USER}
     User Should Be Logged In    ${USER}[name]
