@@ -3,10 +3,18 @@ Documentation    Cenários de cadastro de tarefas
 
 Resource         ../../resources/base.resource
 
+Test Setup       Start Session
+Test Teardown    Take Screenshot
+
 
 *** Test Cases ***
 Deve poder cadastrar uma nova tarefa
     [Documentation]    Deve permitir cadastrar uma nova tarefa
-    ${data}    Get Fixture    tasks    create
+    ${DATA}    Get Fixture    tasks    create
 
-    Log    ${data}
+    Submit Login Form    ${DATA}[user]
+    User Should Be Logged In    ${DATA}[user][name]
+
+    Go To Task Form
+    Submit Task Form    ${DATA}[task]
+    Log    ${DATA}
