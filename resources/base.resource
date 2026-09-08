@@ -1,6 +1,7 @@
 *** Settings ***
 Library     libs/database.py
 Library     Browser
+Library     JSONLibrary
 Resource    env.resource
 Resource    pages/components/Alert.resource
 Resource    pages/components/Header.resource
@@ -27,3 +28,14 @@ Short Password
     Submit Signup Form    ${USER}
 
     Alert Should Be    Informe uma senha com pelo menos 6 digitos
+
+# Helpers
+
+Get Fixture
+    [Documentation]    Loads fixture data for the specified scenario.
+    [Arguments]    ${file_name}    ${scenario}
+    ${data}    Load Json From File
+    ...    ${EXECDIR}/resources/fixtures/${file_name}.json
+    ...    utf-8
+
+    RETURN    ${data}[${scenario}]
