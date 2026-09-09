@@ -42,3 +42,23 @@ Get Fixture
     ...    utf-8
 
     RETURN    ${data}[${scenario}]
+
+Reset User From Database
+    [Documentation]    Resets the user in the database by removing and reinserting it.
+    [Arguments]    ${USER}
+
+    Clean User From Database    ${USER}[email]
+    Insert User From Database    ${USER}
+
+Create A New Task From API
+    [Documentation]    Creates a new task through the API for the specified user.
+    [Arguments]    ${DATA}
+
+    POST User Session    ${DATA}[user]
+    POST A New Task    ${DATA}[task]
+
+Do Login
+    [Documentation]    Logs in the user and verifies that the user is logged in.
+    [Arguments]    ${USER}
+    Submit Login Form    ${USER}
+    User Should Be Logged In    ${USER}[name]
