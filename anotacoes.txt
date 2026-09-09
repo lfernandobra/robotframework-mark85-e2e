@@ -1,3 +1,6 @@
 Pagina recomendada para encontrar elementos na pagina html:
 
 https://devhints.io/xpath
+
+instalar requirements
+pip install -r requirements.txt
