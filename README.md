@@ -1,5 +1,107 @@
 # Udemy Robot Framework + Playwright (RobotExpress)
 
+*Read this in [Portuguese](#português)*
+
+This repository contains a study project on automated testing using Robot Framework, Playwright (Browser Library), and API testing with Requests. The project under test is "Mark85", a task manager composed of an API (Node.js) and a Web Frontend.
+
+## 🛠️ Technologies and Libraries
+
+- **Python 3**
+- **Robot Framework**: Keyword-driven testing framework.
+- **Robot Framework Browser**: Playwright integration with Robot Framework for End-to-End testing.
+- **Robot Framework Requests**: Library for REST API testing.
+- **Node.js**: Platform used to run the backend and frontend of the target application.
+- **MongoDB**: NoSQL database (this project used MongoDB Atlas Cloud).
+
+## 🚀 How to Setup the Environment
+
+To run this project and develop tests, you need to prepare both the testing environment and start the "Mark85" application locally.
+
+### 1. Preparing the Application (Mark85)
+
+The Mark85 application is divided into two parts: **API** and **Web**. You need to have Node.js installed on your machine.
+
+#### Starting the API
+1. Access the API directory:
+   ```bash
+   cd app/mark85/api
+   ```
+2. Install Node dependencies:
+   ```bash
+   npm install
+   ```
+3. The database (MongoDB Atlas) is already configured in the `.env` file inside `app/mark85/api`.
+4. Start the API server (in development mode):
+   ```bash
+   npm run dev
+   ```
+The API will be running locally (usually on port 3333). Keep this terminal open.
+
+#### Starting the Web Interface
+Open a **new terminal tab** and execute:
+1. Access the Web directory:
+   ```bash
+   cd app/mark85/web
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the Web interface server:
+   ```bash
+   npm run dev
+   ```
+The frontend will be accessible (usually at http://localhost:3000). Keep this terminal open.
+
+---
+
+### 2. Preparing the Testing Environment (Robot Framework)
+
+1. Make sure you have Python installed. It's recommended to use a virtual environment (venv).
+   ```bash
+   # (Optional, but recommended) Create and activate the virtual environment:
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
+2. Install the dependencies listed in `requirements.txt` at the root of the project:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Playwright / Browser Library Initialization**:
+   Since the project uses the Robot Framework `Browser` library, you need to download the browser binaries by running:
+   ```bash
+   rfbrowser init
+   ```
+
+---
+
+## 🧪 How to Run the Tests
+
+With the application running (API and Web) and the Robot Framework dependencies installed, return to the repository root (`udemy-robotexpress`) and run the tests from the terminal.
+
+To run all tests in the `tests` folder and generate reports in the `results` folder:
+```bash
+robot -d results tests/
+```
+
+### Directory Structure Explanation
+
+- **`app/`**: Contains the source code for the Mark85 application, which is our system under test (SUT). It was developed in Node.js (separated into `api/` and `web/`).
+- **`tests/`**: Contains the test cases written in Robot Framework (`.robot` files, like `login.robot`, `signup.robot`).
+- **`resources/`**: Where support files for the tests are kept, such as Page Objects, custom Keywords, configurations, or test data.
+- **`mongoDB/`**: Contains useful information about the database used by the application. The `mongoDBcredentials.txt` file has authentication data.
+- **`requirements.txt`**: List of all Python dependencies (Robot Framework libraries and others, like pymongo and Faker) required to run the project.
+
+### 📝 Tips and Useful Links
+- **Page to test XPath**: https://devhints.io/xpath (according to the repository's original notes).
+- **Logs and Reports**: The Robot Framework execution command generates the `log.html`, `report.html`, and `output.xml` files. They are essential for viewing the success or failure of test executions.
+
+---
+
+<div id="português"></div>
+
+# Udemy Robot Framework + Playwright (RobotExpress) - Português
+
 Este repositório contém um projeto de estudos sobre testes automatizados utilizando Robot Framework, Playwright (Browser Library) e testes de API com Requests. O projeto em teste é o "Mark85", um gerenciador de tarefas composto por uma API (Node.js) e um Frontend Web.
 
 ## 🛠️ Tecnologias e Bibliotecas
