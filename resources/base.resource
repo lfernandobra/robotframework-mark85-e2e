@@ -1,22 +1,24 @@
 *** Settings ***
-Library     libs/database.py
-Library     Browser
-Library     JSONLibrary
-Resource    env.resource
-Resource    pages/components/Alert.resource
-Resource    pages/components/Header.resource
-Resource    pages/components/Notice.resource
-Resource    pages/TaskCreatePage.resource
-Resource    pages/SignupPage.resource
-Resource    pages/LoginPage.resource
-Resource    pages/TasksPage.resource
-Resource    services.resource
+Documentation    Common helpers, fixtures, and browser/session setup used across the test suite.
+
+Library          libs/database.py
+Library          Browser
+Library          JSONLibrary
+Resource         env.resource
+Resource         pages/components/Alert.resource
+Resource         pages/components/Header.resource
+Resource         pages/components/Notice.resource
+Resource         pages/TaskCreatePage.resource
+Resource         pages/SignupPage.resource
+Resource         pages/LoginPage.resource
+Resource         pages/TasksPage.resource
+Resource         services.resource
 
 
 *** Keywords ***
 Start Session
     [Documentation]    Starts a browser session and opens the application page.
-    New Browser    browser=chromium    headless=True
+    New Browser    browser=${BROWSER}    headless=True
     New Page    ${BASE_URL}
 
 Short Password
@@ -42,3 +44,23 @@ Get Fixture
     ...    utf-8
 
     RETURN    ${data}[${scenario}]
+
+Reset User From Database
+    [Documentation]    Resets the user in the database by removing and reinserting it.
+    [Arguments]    ${USER}
+
+    Clean User From Database    ${USER}[email]
+    Insert User From Database    ${USER}
+
+Create A New Task From API
+    [Documentation]    Creates a new task through the API for the specified user.
+    [Arguments]    ${DATA}
+
+    POST User Session    ${DATA}[user]
+    POST A New Task    ${DATA}[task]
+
+Do Login
+    [Documentation]    Logs in the user and verifies that the user is logged in.
+    [Arguments]    ${USER}
+    Submit Login Form    ${USER}
+    User Should Be Logged In    ${USER}[name]

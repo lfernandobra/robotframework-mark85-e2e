@@ -13,14 +13,11 @@ Deve poder apagar uma tarefa indesejada
 
     ${DATA}    Get Fixture    tasks    delete
 
-    Clean User From Database    ${DATA}[user][email]
-    Insert User From Database    ${DATA}[user]
+    Reset User From Database    ${DATA}[user]
 
-    POST User Session    ${DATA}[user]
-    POST A New Task    ${DATA}[task]
+    Create A New Task From API    ${DATA}
 
-    Submit Login Form    ${DATA}[user]
-    User Should Be Logged In    ${DATA}[user][name]
+    Do Login    ${DATA}[user]
 
     Request Removal    ${DATA}[task][name]
     Task Should Not Exist    ${DATA}[task][name]
