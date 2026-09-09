@@ -20,3 +20,24 @@ Deve poder cadastrar uma nova tarefa
     Go To Task Form
     Submit Task Form    ${DATA}[task]
     Task Should Be Registered    ${DATA}[task][name]
+
+Não deve cadastrar tarefa com nome duplicado
+    [Documentation]    Não deve permitir cadastrar uma tarefa com nome duplicado
+    [Tags]    dup
+    ${DATA}    Get Fixture    tasks    duplicate
+
+    Clean User From Database    ${DATA}[user][email]
+    Insert User From Database    ${DATA}[user]
+
+    Submit Login Form    ${DATA}[user]
+    User Should Be Logged In    ${DATA}[user][name]
+
+    Go To Task Form
+    Submit Task Form    ${DATA}[task]
+
+    Sleep    3
+
+    Go To Task Form
+    Submit Task Form    ${DATA}[task]
+
+    Notice Should Be    Oops! Tarefa duplicada.
