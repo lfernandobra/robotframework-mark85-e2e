@@ -6,6 +6,17 @@ client = MongoClient('mongodb+srv://lfernandobra_db_user:3LbMgA6lTew3RV7O@cluste
 
 db = client['markdb']
 
+@keyword('Clean User From Database')
+def clean_user(user_email):
+    users = db['users']
+    tasks = db['tasks']
+
+    u = users.find_one({'email': user_email})
+
+    if(u):
+        tasks.delete_many({'user': u['_id']})
+        users.delete_many({'email': user_email})
+
 @keyword('Remove User From Database')
 def remove_user(email):
     users = db['users']
