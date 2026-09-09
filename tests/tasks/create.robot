@@ -10,12 +10,12 @@ Test Teardown    Take Screenshot
 *** Test Cases ***
 Deve poder cadastrar uma nova tarefa
     [Documentation]    Deve permitir cadastrar uma nova tarefa
+    [Tags]    critical
     ${DATA}    Get Fixture    tasks    create
-    Clean User From Database    ${DATA}[user][email]
-    Insert User From Database    ${DATA}[user]
 
-    Submit Login Form    ${DATA}[user]
-    User Should Be Logged In    ${DATA}[user][name]
+    Reset User From Database    ${DATA}[user]
+
+    Do Login    ${DATA}[user]
 
     Go To Task Form
     Submit Task Form    ${DATA}[task]
@@ -26,14 +26,11 @@ Não deve cadastrar tarefa com nome duplicado
     [Tags]    dup
     ${DATA}    Get Fixture    tasks    duplicate
 
-    Clean User From Database    ${DATA}[user][email]
-    Insert User From Database    ${DATA}[user]
+    Reset User From Database    ${DATA}[user]
 
-    POST User Session    ${DATA}[user]
-    POST A New Task    ${DATA}[task]
+    Create A New Task From API    ${DATA}
 
-    Submit Login Form    ${DATA}[user]
-    User Should Be Logged In    ${DATA}[user][name]
+    Do Login    ${DATA}[user]
 
     Go To Task Form
     Submit Task Form    ${DATA}[task]
@@ -44,13 +41,11 @@ Não deve cadastrar uma nova tarefa quando atinge o limite de tags
     [Documentation]    Não deve permitir cadastrar uma tarefa quando atinge o limite de tags
     ${DATA}    Get Fixture    tasks    tags_limit
 
-    Clean User From Database    ${DATA}[user][email]
-    Insert User From Database    ${DATA}[user]
+    Reset User From Database    ${DATA}[user]
 
     POST User Session    ${DATA}[user]
 
-    Submit Login Form    ${DATA}[user]
-    User Should Be Logged In    ${DATA}[user][name]
+    Do Login    ${DATA}[user]
 
     Go To Task Form
     Submit Task Form    ${DATA}[task]

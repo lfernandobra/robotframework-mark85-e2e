@@ -13,13 +13,11 @@ Deve poder marcar uma tarefa como concluída
 
     ${DATA}    Get Fixture    tasks    done
 
-    Clean User From Database    ${DATA}[user][email]
-    Insert User From Database    ${DATA}[user]
+    Reset User From Database    ${DATA}[user]
 
-    POST User Session    ${DATA}[user]
-    POST A New Task    ${DATA}[task]
+    Create A New Task From API    ${DATA}
 
-    Submit Login Form    ${DATA}[user]
-    User Should Be Logged In    ${DATA}[user][name]
+    Do Login    ${DATA}[user]
+
     Mark Task As Completed    ${DATA}[task][name]
     Task Should Be Completed    ${DATA}[task][name]
