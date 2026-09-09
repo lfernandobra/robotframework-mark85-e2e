@@ -10,6 +10,7 @@ Test Teardown    Take Screenshot
 *** Test Cases ***
 Deve poder cadastrar uma nova tarefa
     [Documentation]    Deve permitir cadastrar uma nova tarefa
+    [Tags]    critical
     ${DATA}    Get Fixture    tasks    create
 
     Reset User From Database    ${DATA}[user]

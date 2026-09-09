@@ -16,7 +16,7 @@ Resource    services.resource
 *** Keywords ***
 Start Session
     [Documentation]    Starts a browser session and opens the application page.
-    New Browser    browser=chromium    headless=True
+    New Browser    browser=${BROWSER}    headless=True
     New Page    ${BASE_URL}
 
 Short Password
