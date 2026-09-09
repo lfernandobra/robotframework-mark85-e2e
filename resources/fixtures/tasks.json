@@ -20,5 +20,16 @@
       "name": "Recrutar novos humanos",
       "tags": []
     }
+  },
+  "tags_limit": {
+    "user": {
+      "name": "Carlos Villagran",
+      "email": "kiko@televisa.com",
+      "password": "pwd123"
+    },
+    "task": {
+      "name": "Estudar Python",
+      "tags": ["qax", "python", "programação", "pip"]
+    }
   }
 }
