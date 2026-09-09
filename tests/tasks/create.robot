@@ -39,3 +39,20 @@ Não deve cadastrar tarefa com nome duplicado
     Submit Task Form    ${DATA}[task]
 
     Notice Should Be    Oops! Tarefa duplicada.
+
+Não deve cadastrar uma nova tarefa quando atinge o limite de tags
+    [Documentation]    Não deve permitir cadastrar uma tarefa quando atinge o limite de tags
+    ${DATA}    Get Fixture    tasks    tags_limit
+
+    Clean User From Database    ${DATA}[user][email]
+    Insert User From Database    ${DATA}[user]
+
+    POST User Session    ${DATA}[user]
+
+    Submit Login Form    ${DATA}[user]
+    User Should Be Logged In    ${DATA}[user][name]
+
+    Go To Task Form
+    Submit Task Form    ${DATA}[task]
+
+    Notice Should Be    Oops! Limite de tags atingido.
