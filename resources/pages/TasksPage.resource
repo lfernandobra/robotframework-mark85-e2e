@@ -12,7 +12,18 @@ Task Should Be Registered
     Wait For Elements State    css=.task-todo >> text=${task_name}
     ...    visible    5
 
-    # Get Text    css=.task-todo    equal    ${task_name}
+Task Should Be Completed
+    [Documentation]    Verifica se a tarefa está registrada na lista de tarefas.
+    [Arguments]    ${task_name}
+
+    ${element}    Set Variable    css=.task-done >> text=${task_name}
+
+    Wait For Elements State
+    ...    ${element}
+    ...    visible
+    ...    5
+
+    Get Style    ${element}    text-decoration-line    equal    line-through
 
 Mark Task As Completed
     [Documentation]    Marca a tarefa como concluída.

@@ -22,3 +22,4 @@ Deve poder marcar uma tarefa como concluída
     Submit Login Form    ${DATA}[user]
     User Should Be Logged In    ${DATA}[user][name]
     Mark Task As Completed    ${DATA}[task][name]
+    Task Should Be Completed    ${DATA}[task][name]
