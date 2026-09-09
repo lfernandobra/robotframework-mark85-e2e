@@ -13,3 +13,11 @@ Task Should Be Registered
     ...    visible    5
 
     # Get Text    css=.task-todo    equal    ${task_name}
+
+Mark Task As Completed
+    [Documentation]    Marca a tarefa como concluída.
+    [Arguments]    ${task_name}
+    ${element}    Set Variable
+    ...    xpath=//strong[text()="${task_name}"]/..//button[@class="item-toggle"]
+    Wait For Elements State    ${element}    visible    5
+    Click    ${element}
