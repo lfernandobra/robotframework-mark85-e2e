@@ -29,13 +29,11 @@ Não deve cadastrar tarefa com nome duplicado
     Clean User From Database    ${DATA}[user][email]
     Insert User From Database    ${DATA}[user]
 
+    POST User Session    ${DATA}[user]
+    POST A New Task    ${DATA}[task]
+
     Submit Login Form    ${DATA}[user]
     User Should Be Logged In    ${DATA}[user][name]
-
-    Go To Task Form
-    Submit Task Form    ${DATA}[task]
-
-    Sleep    3
 
     Go To Task Form
     Submit Task Form    ${DATA}[task]
