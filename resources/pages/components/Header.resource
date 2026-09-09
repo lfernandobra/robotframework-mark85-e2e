@@ -14,3 +14,7 @@ User Should Be Logged In
     Wait For Elements State    ${element}
     ...    visible    5
     Get Text    ${element}    equal    Olá, ${splited_name}[0]
+
+Go To Task Form
+    [Documentation]    Abre o formulário de criação de tarefas.
+    Click    css=.button-add
