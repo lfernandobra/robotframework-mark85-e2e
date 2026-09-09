@@ -31,5 +31,16 @@
       "name": "Estudar Python",
       "tags": ["qax", "python", "programação", "pip"]
     }
+  },
+  "done": {
+    "user": {
+      "name": "Tony Stark",
+      "email": "tony@stark.com",
+      "password": "pwd123"
+    },
+    "task": {
+      "name": "Criar uma nova IA",
+      "tags": ["jarvis", "ultron", "ark"]
+    }
   }
 }
