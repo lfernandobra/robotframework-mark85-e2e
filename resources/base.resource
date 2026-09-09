@@ -10,6 +10,7 @@ Resource    pages/TaskCreatePage.resource
 Resource    pages/SignupPage.resource
 Resource    pages/LoginPage.resource
 Resource    pages/TasksPage.resource
+Resource    services.resource
 
 
 *** Keywords ***
