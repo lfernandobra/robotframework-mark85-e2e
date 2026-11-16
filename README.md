@@ -1,197 +1,135 @@
-# Udemy Robot Framework + Playwright (RobotExpress)
+# Mark85 — Robot Framework + Browser Library (Playwright) E2E Suite
 
-*Read this in [Portuguese](#português)*
+[![Mark85 Robot Framework CI](https://github.com/lfernandobra/robotframework-mark85-e2e/actions/workflows/ci.yml/badge.svg)](https://github.com/lfernandobra/robotframework-mark85-e2e/actions/workflows/ci.yml)
+[![Robot Framework](https://img.shields.io/badge/Robot%20Framework-7.4.2-000000?style=flat-square&logo=robotframework&logoColor=white)](https://robotframework.org/)
+[![Browser Library](https://img.shields.io/badge/Playwright-Browser%2020.4-2EAD33?style=flat-square&logo=playwright&logoColor=white)](https://robotframework-browser.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0.3-6BA539?style=flat-square&logo=openapiinitiative&logoColor=white)](docs/swagger/openapi.yaml)
+[![Postman](https://img.shields.io/badge/Postman-FF6C37?style=flat-square&logo=postman&logoColor=white)](docs/postman/Mark85.postman_collection.json)
 
-This repository contains a study project on automated testing using Robot Framework, Playwright (Browser Library), and API testing with Requests. The project under test is "Mark85", a task manager composed of an API (Node.js) and a Web Frontend.
-
-## 🛠️ Technologies and Libraries
-
-- **Python 3**
-- **Robot Framework**: Keyword-driven testing framework.
-- **Robot Framework Browser**: Playwright integration with Robot Framework for End-to-End testing.
-- **Robot Framework Requests**: Library for REST API testing.
-- **Node.js**: Platform used to run the backend and frontend of the target application.
-- **MongoDB**: NoSQL database (this project used MongoDB Atlas Cloud).
-
-## 🚀 How to Setup the Environment
-
-To run this project and develop tests, you need to prepare both the testing environment and start the "Mark85" application locally.
-
-### 1. Preparing the Application (Mark85)
-
-The Mark85 application is divided into two parts: **API** and **Web**. You need to have Node.js installed on your machine.
-
-#### Starting the API
-1. Access the API directory:
-   ```bash
-   cd app/mark85/api
-   ```
-2. Install Node dependencies:
-   ```bash
-   npm install
-   ```
-3. The database (MongoDB Atlas) is already configured in the `.env` file inside `app/mark85/api`.
-4. Start the API server (in development mode):
-   ```bash
-   npm run dev
-   ```
-The API will be running locally (usually on port 3333). Keep this terminal open.
-
-#### Starting the Web Interface
-Open a **new terminal tab** and execute:
-1. Access the Web directory:
-   ```bash
-   cd app/mark85/web
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the Web interface server:
-   ```bash
-   npm run dev
-   ```
-The frontend will be accessible (usually at http://localhost:3000). Keep this terminal open.
+Keyword-driven **End-to-End (E2E)** test automation suite for the **Mark85** task manager (`app/mark85/web` + `app/mark85/api` + **MongoDB**), built with **Robot Framework**, **Browser Library (Playwright)**, **RequestsLibrary**, **pymongo**, and **Robocop**, running end-to-end in **GitHub Actions**.
 
 ---
 
-### 2. Preparing the Testing Environment (Robot Framework)
+## 1. QA Strategy & Artifacts
 
-1. Make sure you have Python installed. It's recommended to use a virtual environment (venv).
-   ```bash
-   # (Optional, but recommended) Create and activate the virtual environment:
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
-2. Install the dependencies listed in `requirements.txt` at the root of the project:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Playwright / Browser Library Initialization**:
-   Since the project uses the Robot Framework `Browser` library, you need to download the browser binaries by running:
-   ```bash
-   rfbrowser init
-   ```
+| Artifact | Purpose | Location |
+| :--- | :--- | :--- |
+| **Test Plan** | Scope, hybrid MongoDB/API seeding, traceability, and exit criteria | [`docs/qa/TEST_PLAN.md`](docs/qa/TEST_PLAN.md) |
+| **Test Case Inventory** | 18 automated Robot Framework cases across 6 suites | [`docs/qa/TEST_CASES.md`](docs/qa/TEST_CASES.md) |
+| **BDD Specifications** | Gherkin scenarios for signup, authentication, and task CRUD | [`specs/features/`](specs/features/) |
+| **Bug / Tech Debt Report** | Analysis of `Sleep 1` in tag entry & parallel user isolation | [`BUG-001`](docs/qa/bug-reports/BUG-001-sleep-and-parallel-user-collision.md) |
+| **OpenAPI / Swagger** | OpenAPI 3.0.3 contract for `/users`, `/sessions`, and `/tasks` | [`docs/swagger/openapi.yaml`](docs/swagger/openapi.yaml) |
+| **Postman Collection** | Collection v2.1 with `pm.test` assertions & JWT token chaining | [`docs/postman/Mark85.postman_collection.json`](docs/postman/Mark85.postman_collection.json) |
 
 ---
 
-## 🧪 How to Run the Tests
+## 2. Architecture & Design Highlights
 
-With the application running (API and Web) and the Robot Framework dependencies installed, return to the repository root (`udemy-robotexpress`) and run the tests from the terminal.
+* **Page & Component Objects (`resources/pages/`):** UI locators and assertions are modularized into pages (`LoginPage`, `SignupPage`, `TaskCreatePage`, `TasksPage`) and shared components (`Alert`, `Header`, `Notice`).
+* **Direct MongoDB Seeding (`resources/libs/database.py`):** Custom Python keyword library (`Clean User From Database`, `Remove User From Database`, `Insert User From Database`) connects lazily via `MONGO_URI` and hashes test passwords with `bcrypt` for deterministic test state.
+* **Hybrid API + UI Setup (`resources/services.resource`):** Authenticates via `POST /sessions` and pre-populates tasks via `POST /tasks` (`RequestsLibrary`) before validating UI interactions (`line-through` completion, duplicate alerts, DOM detachment).
+* **Data-Driven Fixtures & Templates:** Scenarios consume JSON fixtures (`resources/fixtures/tasks.json`) and test password boundaries (`1..5` chars) via reusable keyword templates.
+* **Automated Visual Evidence & Linting:** Captures screenshots on every test teardown (`log.html`) and enforces Robot Framework lint standards with **Robocop** (`pyproject.toml`).
 
-To run all tests in the `tests` folder and generate reports in the `results` folder:
+---
+
+## 3. Repository Structure
+
+```text
+.
+├── .github/workflows/
+│   └── ci.yml                          # CI: MongoDB 7 + Mark85 API/Web + Robocop + Robot E2E
+├── app/mark85/
+│   ├── api/                            # Node.js Express + Mongoose REST API (port 3333)
+│   └── web/                            # React frontend server (port 3000)
+├── docs/
+│   ├── postman/                        # Collection v2.1 and local environment
+│   ├── qa/
+│   │   ├── bug-reports/
+│   │   │   └── BUG-001-sleep-and-parallel-user-collision.md
+│   │   ├── TEST_CASES.md
+│   │   └── TEST_PLAN.md
+│   └── swagger/
+│       └── openapi.yaml                # OpenAPI 3.0.3 specification
+├── resources/
+│   ├── fixtures/tasks.json             # JSON test payloads
+│   ├── libs/database.py                # Custom pymongo + bcrypt Robot keyword library
+│   ├── pages/                          # Page and UI component .resource files
+│   ├── base.resource                   # Shared setup, fixtures, and helper keywords
+│   ├── env.resource                    # Base URLs and browser selection
+│   └── services.resource               # RequestsLibrary REST API keywords
+├── specs/features/                     # BDD specifications in Gherkin (.feature)
+├── tests/
+│   ├── tasks/                          # Task create, update, and delete suites
+│   ├── login.robot
+│   ├── online.robot
+│   └── signup.robot
+├── pyproject.toml                      # Robocop linter configuration
+└── requirements.txt                    # Python & Robot Framework dependencies
+```
+
+---
+
+## 4. Setup & Local Execution
+
+### Prerequisites
+* **Python 3.10+**
+* **Node.js `>= 20.x`**
+* **MongoDB** (local container via `docker run -d -p 27017:27017 mongo:7`, or MongoDB Atlas URI)
+
+### 1. Start MongoDB, API & Web Application
+
 ```bash
+# 1. Start local MongoDB container
+docker run -d --name mark85-mongo -p 27017:27017 mongo:7
+
+# 2. Configure and start Mark85 API (port 3333)
+cp app/mark85/api/.env.example app/mark85/api/.env
+npm --prefix app/mark85/api ci
+(cd app/mark85/api && npm start)
+
+# 3. Start Mark85 Web frontend (port 3000) in a second terminal
+npm --prefix app/mark85/web ci
+npm --prefix app/mark85/web start
+```
+
+### 2. Install Robot Framework & Run Tests
+
+In a third terminal:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+rfbrowser init --with-deps chromium
+
+# Run Robocop static linter
+robocop check tests/ resources/
+
+# Run all 18 E2E tests and store reports in results/
+export MONGO_URI="mongodb://127.0.0.1:27017/"
 robot -d results tests/
 ```
 
-### Directory Structure Explanation
-
-- **`app/`**: Contains the source code for the Mark85 application, which is our system under test (SUT). It was developed in Node.js (separated into `api/` and `web/`).
-- **`tests/`**: Contains the test cases written in Robot Framework (`.robot` files, like `login.robot`, `signup.robot`).
-- **`resources/`**: Where support files for the tests are kept, such as Page Objects, custom Keywords, configurations, or test data.
-- **`mongoDB/`**: Contains useful information about the database used by the application. The `mongoDBcredentials.txt` file has authentication data.
-- **`requirements.txt`**: List of all Python dependencies (Robot Framework libraries and others, like pymongo and Faker) required to run the project.
-
-### 📝 Tips and Useful Links
-- **Page to test XPath**: https://devhints.io/xpath (according to the repository's original notes).
-- **Logs and Reports**: The Robot Framework execution command generates the `log.html`, `report.html`, and `output.xml` files. They are essential for viewing the success or failure of test executions.
+Generated reports (`results/report.html`, `results/log.html`, `results/output.xml`) provide step-by-step execution traces and teardown screenshots.
 
 ---
 
-<div id="português"></div>
+## 5. CI/CD Pipeline (GitHub Actions)
 
-# Udemy Robot Framework + Playwright (RobotExpress) - Português
-
-Este repositório contém um projeto de estudos sobre testes automatizados utilizando Robot Framework, Playwright (Browser Library) e testes de API com Requests. O projeto em teste é o "Mark85", um gerenciador de tarefas composto por uma API (Node.js) e um Frontend Web.
-
-## 🛠️ Tecnologias e Bibliotecas
-
-- **Python 3**
-- **Robot Framework**: Framework de testes orientado a palavras-chave (Keywords).
-- **Robot Framework Browser**: Integração do Playwright com o Robot Framework para testes End-to-End.
-- **Robot Framework Requests**: Biblioteca para testes de API REST.
-- **Node.js**: Plataforma utilizada para rodar o backend e o frontend da aplicação alvo.
-- **MongoDB**: Banco de dados NoSQL (neste projeto foi usado o MongoDB Atlas Cloud).
-
-## 🚀 Como Preparar o Ambiente
-
-Para rodar este projeto e desenvolver os testes, você precisa preparar tanto o ambiente de desenvolvimento (testes) quanto colocar a aplicação "Mark85" no ar localmente.
-
-### 1. Preparando a Aplicação (Mark85)
-
-A aplicação Mark85 é dividida em duas partes: **API** e **Web**. É necessário ter o Node.js instalado na máquina.
-
-#### Iniciando a API
-1. Acesse o diretório da API:
-   ```bash
-   cd app/mark85/api
-   ```
-2. Instale as dependências do Node:
-   ```bash
-   npm install
-   ```
-3. O banco de dados (MongoDB Atlas) já está configurado no arquivo `.env` dentro de `app/mark85/api`.
-4. Inicie o servidor da API (em modo desenvolvimento):
-   ```bash
-   npm run dev
-   ```
-A API estará rodando localmente (normalmente na porta 3333). Mantenha este terminal aberto.
-
-#### Iniciando a Interface Web
-Abra uma **nova aba de terminal** e execute:
-1. Acesse o diretório Web:
-   ```bash
-   cd app/mark85/web
-   ```
-2. Instale as dependências:
-   ```bash
-   npm install
-   ```
-3. Inicie o servidor da interface Web:
-   ```bash
-   npm run dev
-   ```
-O frontend estará acessível (normalmente em http://localhost:3000). Mantenha este terminal aberto.
+Workflow [`ci.yml`](.github/workflows/ci.yml) runs on every `push` and `pull_request` to `main`:
+1. Starts a `mongo:7` container, Mark85 API (`:3333`), and Mark85 Web (`:3000`).
+2. Installs Python dependencies and initializes Chromium via `rfbrowser init --with-deps chromium`.
+3. Validates Postman JSON files and runs `robocop check tests/ resources/`.
+4. Executes `robot -d results tests/` (`18` E2E scenarios) and archives `results/` for 14 days.
 
 ---
 
-### 2. Preparando o Ambiente de Testes (Robot Framework)
+## 6. Author
 
-1. Certifique-se de ter o Python instalado. É recomendado o uso de um ambiente virtual (venv).
-   ```bash
-   # (Opcional, mas recomendado) Criar e ativar o ambiente virtual:
-   python -m venv .venv
-   source .venv/bin/activate  # No Windows: .venv\Scripts\activate
-   ```
-2. Instale as dependências listadas no `requirements.txt` na raiz do projeto:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Inicialização do Playwright / Browser Library**:
-   Como o projeto utiliza a biblioteca `Browser` do Robot Framework, você precisa baixar os binários dos navegadores executando o comando:
-   ```bash
-   rfbrowser init
-   ```
-
----
-
-## 🧪 Como Executar os Testes
-
-Com a aplicação rodando (API e Web) e as dependências do Robot Framework instaladas, volte para a raiz do repositório (`udemy-robotexpress`) e execute os testes pelo terminal.
-
-Para rodar todos os testes na pasta `tests` e gerar os relatórios na pasta `results`:
-```bash
-robot -d results tests/
-```
-
-### Explicação sobre a Estrutura de Diretórios
-
-- **`app/`**: Contém o código fonte da aplicação Mark85, que é o nosso sistema sob teste (SUT). Ela foi desenvolvida em Node.js (separada em `api/` e `web/`).
-- **`tests/`**: Contém os casos de testes escritos em Robot Framework (arquivos `.robot`, como `login.robot`, `signup.robot`).
-- **`resources/`**: Onde ficam guardados arquivos de suporte para os testes, como Page Objects, Keywords customizadas, configurações ou massa de dados.
-- **`mongoDB/`**: Contém informações úteis sobre o banco de dados utilizado pela aplicação. O arquivo `mongoDBcredentials.txt` possui dados de autenticação.
-- **`requirements.txt`**: Lista com todas as dependências Python (bibliotecas do Robot Framework e outras, como pymongo e Faker) necessárias para rodar o projeto.
-
-### 📝 Dicas e Links Úteis
-- **Página para testar XPath**: https://devhints.io/xpath (de acordo com as anotações originais do repositório).
-- **Logs e Relatórios**: O comando de execução do Robot Framework gera os arquivos `log.html`, `report.html` e `output.xml`. Eles são fundamentais para visualização de sucesso ou falha das execuções dos testes.
+**Luis Fernando Brandão**  
+QA Automation Engineer  
+* [LinkedIn](https://linkedin.com/in/lfernandobra)  
+* [GitHub](https://github.com/lfernandobra)  
+* lfernandobra@gmail.com

@@ -1,0 +1,239 @@
+openapi: 3.0.3
+info:
+  title: Mark85 API
+  version: 1.0.0
+  description: |
+    REST contract specification for the Mark85 Node.js/Express/MongoDB backend (`app/mark85/api`).
+servers:
+  - url: http://localhost:3333
+    description: Local Mark85 API server
+
+tags:
+  - name: Auth
+    description: User registration and JWT session authentication
+  - name: Tasks
+    description: Authenticated task management endpoints
+
+components:
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Raw JWT token returned by POST /sessions (sent directly in Authorization header)
+
+  schemas:
+    UserRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          example: "Steve Jobs"
+        email:
+          type: string
+          format: email
+          example: "jobs@apple.com"
+        password:
+          type: string
+          format: password
+          minLength: 6
+          example: "pwd123"
+
+    SessionRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "jobs@apple.com"
+        password:
+          type: string
+          format: password
+          example: "pwd123"
+
+    TaskRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: "Criar uma nova versão do Ipod"
+        tags:
+          type: array
+          maxItems: 3
+          items:
+            type: string
+          example: ["ios", "music", "ipod"]
+
+    TaskItem:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "66d7a1c3f12b4c0012a9e001"
+        name:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        is_done:
+          type: boolean
+
+paths:
+  /users:
+    post:
+      tags:
+        - Auth
+      summary: Register a new Mark85 user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequest"
+      responses:
+        "201":
+          description: User registered
+        "400":
+          description: Joi validation error
+        "409":
+          description: Email already registered
+
+  /sessions:
+    post:
+      tags:
+        - Auth
+      summary: Authenticate user and issue JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionRequest"
+      responses:
+        "200":
+          description: Session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        "401":
+          description: Invalid credentials
+
+  /tasks:
+    get:
+      tags:
+        - Tasks
+      summary: List tasks for authenticated user
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TaskItem"
+    post:
+      tags:
+        - Tasks
+      summary: Create a new task (max 3 tags)
+      security:
+        - tokenAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskRequest"
+      responses:
+        "201":
+          description: Task created
+        "400":
+          description: Validation error (e.g., tag limit exceeded)
+        "409":
+          description: Duplicate task name
+
+  /tasks/{task_id}:
+    get:
+      tags:
+        - Tasks
+      summary: Get a single task by Mongo ObjectId
+      security:
+        - tokenAuth: []
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Task details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskItem"
+    delete:
+      tags:
+        - Tasks
+      summary: Remove a task by Mongo ObjectId
+      security:
+        - tokenAuth: []
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Task deleted
+
+  /tasks/{task_id}/done:
+    put:
+      tags:
+        - Tasks
+      summary: Mark task as completed
+      security:
+        - tokenAuth: []
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Task marked as done
+
+  /tasks/{task_id}/todo:
+    put:
+      tags:
+        - Tasks
+      summary: Mark task as pending
+      security:
+        - tokenAuth: []
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Task marked as todo

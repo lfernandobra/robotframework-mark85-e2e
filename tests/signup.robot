@@ -3,8 +3,6 @@ Documentation    Cenários de testes do cadastro de usuários
 
 Resource         ../resources/base.resource
 
-# Suite Setup    Log    Tudo aqui ocorre antes da Suite (antes de todos os testes)
-# Suite Teardown    Log    Tudo aqui ocorre depois da Suite (depois de todos os testes)
 Test Setup       Start Session
 Test Teardown    Take Screenshot
 
@@ -113,8 +111,3 @@ Não deve cadastrar com senha de 5 digitos
     [Tags]    short_pass
     [Template]    NONE
     Short Password    12345
-
-# *** Keywords ***
-# Short Password
-#    [Documentation]    Verifica se o cadastro não permite uma senha com menos de 6 dígitos.
-#    [Arguments]    ${short_pass}

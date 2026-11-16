@@ -23,7 +23,7 @@ Deve poder logar com um usuário pré-cadastrado
     User Should Be Logged In    ${USER}[name]
 
 Não Deve poder logar com senha inválida
-    [Documentation]    Verifica que um usuário pré-cadastrado consegue logar com sucesso.
+    [Documentation]    Verifica que o sistema exibe erro de autenticação ao informar senha inválida.
     ${USER}    Create Dictionary
     ...    name=Steve Woz
     ...    email=woz@apple.com

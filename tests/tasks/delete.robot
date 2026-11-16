@@ -9,7 +9,7 @@ Test Teardown    Take Screenshot
 
 *** Test Cases ***
 Deve poder apagar uma tarefa indesejada
-    [Documentation]    Deve permitir marcar uma tarefa como concluída
+    [Documentation]    Deve permitir remover uma tarefa indesejada.
 
     ${DATA}    Get Fixture    tasks    delete
 

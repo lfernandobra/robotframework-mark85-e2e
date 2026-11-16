@@ -2,7 +2,7 @@
 log.html
 output.xml
 report.html
-results
+results/
 
 # Byte-compiled / Python cache
 __pycache__/
@@ -12,6 +12,16 @@ __pycache__/
 
 playwright-log.txt
 
-# Environments & IDE
+# Environments & Secrets
+.env
+.env.*
+!.env.example
+app/mark85/api/.env
+
+# Node & OS & IDE
+node_modules/
+**/node_modules/
+.DS_Store
+**/.DS_Store
 .venv/
 .vscode/

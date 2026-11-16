@@ -1,0 +1,121 @@
+name: Mark85 Robot Framework CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  robot-e2e-suite:
+    name: Robocop & Robot Browser E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      MONGO_URI: mongodb://127.0.0.1:27017/markdb
+      MONGO_DB: markdb
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Start MongoDB 7 container
+        run: |
+          docker run -d \
+            --name mark85-mongo \
+            --network host \
+            mongo:7
+
+          for i in $(seq 1 30); do
+            if docker exec mark85-mongo mongosh --quiet --eval "db.runCommand({ ping: 1 })" >/dev/null 2>&1; then
+              echo "MongoDB 7 is ready."
+              break
+            fi
+            if [ "$i" -eq 30 ]; then
+              docker logs mark85-mongo
+              exit 1
+            fi
+            sleep 1
+          done
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install and start Mark85 API & Web
+        run: |
+          npm --prefix app/mark85/api ci
+          npm --prefix app/mark85/web ci
+
+          (cd app/mark85/api && ./node_modules/.bin/babel-node build/app.js > /tmp/mark85-api.log 2>&1 &)
+          for i in $(seq 1 30); do
+            if curl -s -o /dev/null http://localhost:3333/sessions; then
+              echo "Mark85 API is ready."
+              break
+            fi
+            if [ "$i" -eq 30 ]; then
+              cat /tmp/mark85-api.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+          npm --prefix app/mark85/web start > /tmp/mark85-web.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3000 >/dev/null; then
+              echo "Mark85 Web is ready."
+              break
+            fi
+            if [ "$i" -eq 30 ]; then
+              cat /tmp/mark85-web.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Robot Framework dependencies & Chromium browser
+        run: |
+          pip install -r requirements.txt
+          rfbrowser init --with-deps chromium
+
+      - name: Validate Postman JSON & run Robocop linter
+        run: |
+          node -e "
+            const fs = require('fs');
+            JSON.parse(fs.readFileSync('docs/postman/Mark85.postman_collection.json', 'utf8'));
+            JSON.parse(fs.readFileSync('docs/postman/Mark85.local.postman_environment.json', 'utf8'));
+          "
+          robocop check tests/ resources/
+
+      - name: Run Robot Framework E2E suite
+        run: robot -d results tests/
+
+      - name: Dump server logs on failure
+        if: failure()
+        run: |
+          echo "=== API Log ==="
+          cat /tmp/mark85-api.log || true
+          echo "=== Web Log ==="
+          cat /tmp/mark85-web.log || true
+
+      - name: Upload Robot Framework reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-results
+          path: results/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Cleanup MongoDB container
+        if: always()
+        run: docker rm -f mark85-mongo || true
